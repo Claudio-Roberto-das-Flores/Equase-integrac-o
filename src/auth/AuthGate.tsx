@@ -69,7 +69,8 @@ export default function AuthGate() {
     )
   }
 
-  return <App />
+  const currentCompany = memberships.find((membership) => membership.company_id === companyId)?.companies
+  return <App companyId={companyId} companyName={currentCompany?.trade_name || currentCompany?.legal_name || 'Minha empresa'} />
 }
 
 function LoadingScreen() {
