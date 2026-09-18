@@ -25,6 +25,7 @@ import {
   WalletCards,
   X,
 } from 'lucide-react'
+import RegistrationsPage from './modules/RegistrationsPage'
 
 type NavItem = { label: string; icon: ComponentType<{ size?: number; strokeWidth?: number }> }
 
@@ -55,7 +56,7 @@ const activities = [
   { title: 'Estoque atualizado', meta: 'Entrada do pedido #PC-209 · há 2 horas', value: '52 unidades', kind: 'neutral' },
 ]
 
-function App() {
+function App({ companyId, companyName = 'Equase Desenvolvimento' }: { companyId?: string; companyName?: string }) {
   const [active, setActive] = useState('Visão geral')
   const [menuOpen, setMenuOpen] = useState(false)
   const [period, setPeriod] = useState('Este mês')
@@ -80,7 +81,7 @@ function App() {
 
         <div className="company-switcher">
           <Building2 size={19} />
-          <div><span>Empresa atual</span><strong>Equase Desenvolvimento</strong></div>
+          <div><span>Empresa atual</span><strong>{companyName}</strong></div>
           <ChevronDown size={16} />
         </div>
 
@@ -119,9 +120,19 @@ function App() {
 
         <div className="content">
           <section className="page-heading">
-            <div><span className="eyebrow">{today}</span><h1>{active}</h1><p>Acompanhe os principais números e movimentações da sua empresa.</p></div>
-            <label className="period-select">Período<select value={period} onChange={(e) => setPeriod(e.target.value)}><option>Hoje</option><option>Esta semana</option><option>Este mês</option><option>Este ano</option></select></label>
+            <div><span className="eyebrow">{today}</span><h1>{active}</h1><p>{active === 'Cadastros' ? 'Organize clientes, fornecedores, produtos e serviços.' : 'Acompanhe os principais números e movimentações da sua empresa.'}</p></div>
+            {active === 'Visão geral' && <label className="period-select">Período<select value={period} onChange={(e) => setPeriod(e.target.value)}><option>Hoje</option><option>Esta semana</option><option>Este mês</option><option>Este ano</option></select></label>}
           </section>
+
+          {active === 'Cadastros' && companyId ? <RegistrationsPage companyId={companyId} /> : <Dashboard selectSection={selectSection} />}
+        </div>
+      </main>
+    </div>
+  )
+}
+
+function Dashboard({ selectSection }: { selectSection: (label: string) => void }) {
+  return <>
 
           <section className="metrics-grid">
             <Metric title="Faturamento" value="R$ 48.720" change="12,8%" positive icon={BadgeDollarSign} />
@@ -167,10 +178,7 @@ function App() {
               {activities.map((item) => <div className="activity" key={item.title}><span className="activity-icon"><PackageCheck size={19} /></span><div><strong>{item.title}</strong><small>{item.meta}</small></div><b className={item.kind}>{item.value}</b></div>)}
             </div>
           </article>
-        </div>
-      </main>
-    </div>
-  )
+        </>
 }
 
 function Metric({ title, value, change, positive = false, icon: Icon }: { title: string; value: string; change: string; positive?: boolean; icon: ComponentType<{ size?: number }> }) {
