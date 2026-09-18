@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 type Mode = 'login' | 'signup' | 'forgot'
 
 export default function LoginPage() {
+  const appUrl = new URL(import.meta.env.BASE_URL, window.location.origin).toString()
   const [mode, setMode] = useState<Mode>('login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -27,13 +28,16 @@ export default function LoginPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: name } },
+          options: {
+            data: { full_name: name },
+            emailRedirectTo: appUrl,
+          },
         })
         if (error) throw error
         setMessage({ kind: 'success', text: 'Cadastro realizado. Verifique seu e-mail para confirmar a conta.' })
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: appUrl,
         })
         if (error) throw error
         setMessage({ kind: 'success', text: 'Enviamos as instruções de recuperação para seu e-mail.' })
