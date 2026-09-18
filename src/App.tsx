@@ -26,6 +26,7 @@ import {
   X,
 } from 'lucide-react'
 import RegistrationsPage from './modules/RegistrationsPage'
+import InventoryPage from './modules/InventoryPage'
 
 type NavItem = { label: string; icon: ComponentType<{ size?: number; strokeWidth?: number }> }
 
@@ -124,7 +125,7 @@ function App({ companyId, companyName = 'Equase Desenvolvimento' }: { companyId?
             {active === 'Visão geral' && <label className="period-select">Período<select value={period} onChange={(e) => setPeriod(e.target.value)}><option>Hoje</option><option>Esta semana</option><option>Este mês</option><option>Este ano</option></select></label>}
           </section>
 
-          {active === 'Cadastros' && companyId ? <RegistrationsPage companyId={companyId} /> : <Dashboard selectSection={selectSection} />}
+          {active === 'Cadastros' && companyId ? <RegistrationsPage companyId={companyId} /> : active === 'Estoque' && companyId ? <InventoryPage companyId={companyId} /> : <Dashboard selectSection={selectSection} />}
         </div>
       </main>
     </div>
