@@ -6,6 +6,7 @@ type StockProduct = {
   id: string
   sku: string
   name: string
+  description: string | null
   unit: string
   minimum_stock: number
   cost_price: number
@@ -37,7 +38,7 @@ export default function InventoryPage({ companyId }: { companyId: string }) {
     }
     setWarehouseId(warehouse.id)
     const [{ data: productRows, error: productError }, { data: balanceRows, error: balanceError }] = await Promise.all([
-      supabase.from('products').select('id, sku, name, unit, minimum_stock, cost_price').eq('company_id', companyId).eq('kind', 'product').eq('status', 'active').order('name'),
+      supabase.from('products').select('id, sku, name, description, unit, minimum_stock, cost_price').eq('company_id', companyId).eq('kind', 'product').eq('status', 'active').order('name'),
       supabase.from('inventory_balances').select('product_id, quantity, reserved_quantity').eq('company_id', companyId).eq('warehouse_id', warehouse.id),
     ])
     if (productError || balanceError) setError(productError?.message || balanceError?.message || 'Não foi possível carregar o estoque.')
@@ -54,7 +55,7 @@ export default function InventoryPage({ companyId }: { companyId: string }) {
   const visibleProducts = useMemo(() => {
     const term = search.trim().toLocaleLowerCase('pt-BR')
     return products.filter((product) => {
-      const matches = !term || product.name.toLocaleLowerCase('pt-BR').includes(term) || product.sku.toLocaleLowerCase('pt-BR').includes(term)
+      const matches = !term || [product.name, product.sku, product.description].some((value) => value?.toLocaleLowerCase('pt-BR').includes(term))
       return matches && (!lowOnly || product.quantity <= product.minimum_stock)
     })
   }, [products, search, lowOnly])
@@ -91,7 +92,7 @@ export default function InventoryPage({ companyId }: { companyId: string }) {
           <div className="inventory-head"><span>Produto</span><span>Disponível</span><span>Reservado</span><span>Mínimo</span><span>Situação</span></div>
           {visibleProducts.map((product) => {
             const low = product.quantity <= product.minimum_stock
-            return <div className="inventory-row" key={product.id}><span data-label="Produto"><strong>{product.name}</strong><small>{product.sku} · {product.unit}</small></span><span data-label="Disponível"><b>{formatQuantity(product.quantity)}</b></span><span data-label="Reservado">{formatQuantity(product.reserved_quantity)}</span><span data-label="Mínimo">{formatQuantity(product.minimum_stock)}</span><span data-label="Situação"><i className={`stock-status ${low ? 'low' : 'ok'}`}>{low ? 'Estoque baixo' : 'Normal'}</i></span></div>
+            return <div className="inventory-row" key={product.id}><span data-label="Produto"><strong>{product.name}</strong><small>{product.sku} · {product.unit}{product.description ? ` · ${product.description}` : ''}</small></span><span data-label="Disponível"><b>{formatQuantity(product.quantity)}</b></span><span data-label="Reservado">{formatQuantity(product.reserved_quantity)}</span><span data-label="Mínimo">{formatQuantity(product.minimum_stock)}</span><span data-label="Situação"><i className={`stock-status ${low ? 'low' : 'ok'}`}>{low ? 'Estoque baixo' : 'Normal'}</i></span></div>
           })}
           {!visibleProducts.length && <div className="empty-state">Nenhum produto corresponde aos filtros.</div>}
         </div>
