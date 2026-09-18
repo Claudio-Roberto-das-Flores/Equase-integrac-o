@@ -101,13 +101,16 @@ h1 { margin: 4px 0 4px; font-family: 'Playfair Display', serif; font-size: 31px;
 .registration-search input { width: 100%; border: 1px solid #dce2dd; background: #f8faf8; border-radius: 8px; padding: 9px 12px 9px 36px; outline: none; font-size: 11px; }
 .registration-search input:focus { border-color: #6f9b91; box-shadow: 0 0 0 3px #e5f0ec; }
 .data-table { --table-columns: 1.35fr 1fr 1.3fr 1fr .65fr; }
-.data-table.products-table { --table-columns: 1.6fr .8fr .65fr .85fr .85fr; }
+.data-table.products-table { --table-columns: 1.8fr .8fr .65fr .85fr .85fr .7fr; }
 .table-head, .table-row { display: grid; grid-template-columns: var(--table-columns); gap: 15px; align-items: center; padding: 12px 18px; }
 .table-head { background: #f7f9f7; color: #778580; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
 .table-row { border-top: 1px solid #edf0ed; color: #455651; font-size: 10px; min-height: 58px; }
 .table-row:first-of-type { border-top: 0; }
 .table-row strong { display: block; color: #223b36; font-size: 11px; }
 .table-row small { display: block; color: #85918e; font-size: 9px; margin-top: 3px; }
+.products-table .table-row small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 32ch; }
+.edit-record { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #d7e4de; border-radius: 7px; background: #f2f8f5; color: #235e53; padding: 7px 9px; font-size: 10px; font-weight: 700; }
+.edit-record:hover { background: #e4f2eb; }
 .status-pill { display: inline-block; padding: 4px 8px; border-radius: 12px; font-style: normal; font-size: 9px; font-weight: 700; }
 .status-pill.active { color: #347464; background: #e7f4ee; }
 .status-pill.inactive { color: #8b5b56; background: #f7ebe9; }
@@ -125,8 +128,12 @@ h1 { margin: 4px 0 4px; font-family: 'Playfair Display', serif; font-size: 31px;
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-grid label { color: #556762; font-size: 10px; font-weight: 600; }
 .form-grid label.full { grid-column: 1 / -1; }
-.form-grid input, .form-grid select { width: 100%; margin-top: 5px; border: 1px solid #d7dfd9; border-radius: 8px; padding: 10px 11px; background: white; outline: none; color: #263d38; font-size: 11px; }
-.form-grid input:focus, .form-grid select:focus { border-color: #6d9c91; box-shadow: 0 0 0 3px #e5f1ed; }
+.form-grid input, .form-grid select, .form-grid textarea { width: 100%; margin-top: 5px; border: 1px solid #d7dfd9; border-radius: 8px; padding: 10px 11px; background: white; outline: none; color: #263d38; font-size: 11px; }
+.form-grid textarea { resize: vertical; min-height: 90px; font-family: inherit; line-height: 1.45; }
+.form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { border-color: #6d9c91; box-shadow: 0 0 0 3px #e5f1ed; }
+.product-form h3 { grid-column: 1 / -1; margin: 6px 0 -5px; border-bottom: 1px solid #e8ece9; padding-bottom: 8px; color: #264e44; font-size: 12px; }
+.product-form h3:first-child { margin-top: 0; }
+.product-form .form-hint { grid-column: 1 / -1; margin: -7px 0 0; color: #75847e; font-size: 10px; line-height: 1.4; }
 .form-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
 .form-message { border-radius: 8px; padding: 10px 12px; font-size: 10px; margin: 12px 18px; }
 .registration-modal .form-message { margin: 13px 0 0; }
