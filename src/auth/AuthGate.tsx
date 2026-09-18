@@ -58,7 +58,15 @@ export default function AuthGate() {
   if (loading) return <LoadingScreen />
   if (!session) return <LoginPage />
   if (!memberships.length || !companyId) {
-    return <CompanyOnboarding onCreated={(id) => window.location.assign(`/?company=${id}`)} />
+    return (
+      <CompanyOnboarding
+        onCreated={(id) => {
+          const appUrl = new URL(import.meta.env.BASE_URL, window.location.origin)
+          appUrl.searchParams.set('company', id)
+          window.location.assign(appUrl.toString())
+        }}
+      />
+    )
   }
 
   return <App />
